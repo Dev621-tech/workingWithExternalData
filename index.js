@@ -41,12 +41,14 @@ async function initialLoad() {
       breedSelect.appendChild(option);
     });
 
+    // Trigger change event to load carousel at first
     breedSelect.dispatchEvent(new Event("change"));
   } catch (error) {
     console.log(`❌ Error: ${error.message}`);
   }
 }
 
+// immediately run
 initialLoad();
 
 /**
@@ -69,14 +71,18 @@ breedSelect.addEventListener("change", async (evt) => {
   // console.log(selectedBreed);
 
   try {
+    // FETCH
     let response = await fetch(
       `https://api.thecatapi.com/v1/images/search?limit=3&breed_ids=${selectedBreed}&api_key=${apiKey}`
     );
 
+    // & PARSE
     const data = await response.json();
 
+    // FRESH START
     Carousel.clear();
 
+    // Loops through data and puts images in carousel
     data.forEach((item) => {
       const imgSrc = item.url;
       const imgAlt = item.breeds[0].name;
@@ -85,15 +91,22 @@ breedSelect.addEventListener("change", async (evt) => {
       Carousel.appendCarousel(carouselItem);
     });
 
+    // Start fresh textContent
     infoDump.textContent = "";
 
+    // Ensures breed data
     if (data[0] && data[0].breeds[0]) {
       const breed = data[0].breeds[0];
 
+      // Get breed description
       const description = document.createElement("p");
       description.textContent = breed.description;
 
+      // Append it
       infoDump.appendChild(description);
+
+      // Restarts carousel
+      Carousel.start();
     }
   } catch (error) {
     console.log(`❌ Error: ${error.message}`);
