@@ -44,6 +44,7 @@ async function initialLoad() {
 }
 
 initialLoad();
+
 /**
  * 2. Create an event handler for breedSelect that does the following:
  * - Retrieve information on the selected breed from the cat API using fetch().
