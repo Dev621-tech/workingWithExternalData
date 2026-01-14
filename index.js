@@ -31,6 +31,7 @@ async function initialLoad() {
 
     // Parse into JSON
     response = await response.json();
+    console.log(response);
 
     // Populates DropDown Menu with breeds
     response.forEach((breed) => {
@@ -76,7 +77,24 @@ breedSelect.addEventListener("change", async (evt) => {
 
     Carousel.clear();
 
-    data.forEach((item) => {});
+    data.forEach((item) => {
+      const imgSrc = item.url;
+      const imgAlt = item.breeds[0].name;
+      const imgId = item.id;
+      const carouselItem = Carousel.createCarouselItem(imgSrc, imgAlt, imgId);
+      Carousel.appendCarousel(carouselItem);
+    });
+
+    infoDump.textContent = "";
+
+    if (data[0] && data[0].breeds[0]) {
+      const breed = data[0].breeds[0];
+
+      const description = document.createElement("p");
+      description.textContent = breed.description;
+
+      infoDump.appendChild(description);
+    }
   } catch (error) {
     console.log(`❌ Error: ${error.message}`);
   }
